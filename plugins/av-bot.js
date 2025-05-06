@@ -12,7 +12,7 @@ conn.sendButton(m.chat, `${mssg.hi} *${name}*\n`, mssg.ig, null, [
 conn.sendFile(m.chat, av, 'audio.mp3', null, m, true, { type: 'audioMessage', ptt: true })
 } 
 
-handler.customPrefix = /^(bot|senna)$/i
+handler.customPrefix = /^(bot|sumi)$/i
 handler.command = new RegExp
 
 export default handler
