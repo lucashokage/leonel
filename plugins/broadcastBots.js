@@ -15,7 +15,7 @@ let handler = async (m, { conn, usedPrefix, text }) => {
     
 } 
 handler.help = ['txbot']
-handler.tags = ['bebot']
+handler.tags = ['subbot']
 handler.command = ['txbot'] 
 handler.rowner = true
 
