@@ -27,7 +27,7 @@ let handler = async (m, { conn: _conn, args, usedPrefix, command, isOwner }) => 
 
   let parent = args[0] && args[0] == 'plz' ? _conn : await global.conn
   if (!((args[0] && args[0] == 'plz') || (await global.conn).user.jid == _conn.user.jid)) {
-	throw `📌 ${mssg.nobbot}\n\n wa.me/${global.conn.user.jid.split`@`[0]}?text=${usedPrefix}botclone`
+	throw `📌 ${mssg.nobbot}\n\n wa.me/${global.conn.user.jid.split`@`[0]}?text=${usedPrefix}.serbot`
 }
 
 	//=====
@@ -37,13 +37,13 @@ let handler = async (m, { conn: _conn, args, usedPrefix, command, isOwner }) => 
   //let authFolderB = m.sender.split('@')[0]
 
 
-    if (!fs.existsSync("./bebots/"+ authFolderB)){
-        fs.mkdirSync("./bebots/"+ authFolderB, { recursive: true });
+    if (!fs.existsSync("./sumibots/"+ authFolderB)){
+        fs.mkdirSync("./sumibots/"+ authFolderB, { recursive: true });
     }
-    args[0] ? fs.writeFileSync("./bebots/" + authFolderB + "/creds.json", JSON.stringify(JSON.parse(Buffer.from(args[0], "base64").toString("utf-8")), null, '\t')) : ""
+    args[0] ? fs.writeFileSync("./sumibots/" + authFolderB + "/creds.json", JSON.stringify(JSON.parse(Buffer.from(args[0], "base64").toString("utf-8")), null, '\t')) : ""
     
 //--
-const {state, saveState, saveCreds} = await useMultiFileAuthState(`./bebots/${authFolderB}`)
+const {state, saveState, saveCreds} = await useMultiFileAuthState(`./sumibots/${authFolderB}`)
 const msgRetryCounterMap = (MessageRetryMap) => { };
 const msgRetryCounterCache = new NodeCache()
 const {version} = await fetchLatestBaileysVersion();
@@ -210,8 +210,8 @@ bbts()
 
 }
 handler.help = ['botclone']
-handler.tags = ['bebot']
-handler.command = ['bebot', 'serbot', 'jadibot', 'botclone', 'clonebot']
+handler.tags = ['subbot']
+handler.command = ['bebot', 'serbot', 'jadibot', 'serbot --code', 'clonebot']
 handler.rowner = false
 
 export default handler
