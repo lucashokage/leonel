@@ -95,10 +95,13 @@ if (methodCode && !conn.authState.creds.registered) {
     setTimeout(async () => {
         let codeBot = await conn.requestPairingCode(cleanedNumber);
         codeBot = codeBot?.match(/.{1,4}/g)?.join("-") || codeBot;
-        // Send image and description
+        
+        // Send image and description with the code included
         await parent.sendFile(m.chat, 'https://i.ibb.co/SKKdvRb/code.jpg', 'qrcode.png', `➤ Code: *${codeBot}*\n\n${mssg.botqr}`, m)
-        // Send code separately for easy copying
-        await parent.sendMessage(m.chat, { text: codeBot }, { quoted: m })
+        
+        // Send just the raw code in a separate message for easy copying
+        await parent.sendMessage(m.chat, { text: `${codeBot}` }, { quoted: m })
+        
         rl.close();
     }, 3000);
 }
@@ -145,7 +148,7 @@ async function connectionUpdate(update) {
     // Send connection message
     await parent.sendMessage(conn.user.jid, {text : `✅ ${mssg.connMsg}`}, { quoted: m })
     
-    // Send code in a separate message for easy copying
+    // Send just the raw code in a separate message for easy copying
     const codeText = usedPrefix + command + " " + Buffer.from(fs.readFileSync("./bebots/" + authFolderB + "/creds.json"), "utf-8").toString("base64")
     await parent.sendMessage(conn.user.jid, {text : codeText}, { quoted: m })
 	  }
@@ -217,7 +220,7 @@ bbts()
 }
 handler.help = ['botclone']
 handler.tags = ['subbot']
-handler.command = ['code', 'serbot', 'jadibot', 'serbot --code', 'clonebot']
+handler.command = ['bebot', 'serbot', 'jadibot', 'serbot --code', 'clonebot']
 handler.rowner = false
 
 export default handler
