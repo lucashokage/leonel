@@ -159,7 +159,7 @@ export async function handler(chatUpdate) {
     if (
       global.db.data.settings[this.user.jid].sologp &&
       !m.chat.endsWith("g.us") &&
-      !/jadibot|bebot|getcode|serbot|bots|stop|support|donate|off|on|s|tiktok|code|newcode|join/gim.test(m.text)
+      !/jadibot|code|getcode|serbot|bots|stop|support|donate|off|on|s|tiktok|code|newcode|join/gim.test(m.text)
     )
       return
 
@@ -446,87 +446,51 @@ export async function participantsUpdate({ id, participants, action }) {
   if (opts["self"]) return
   if (global.db.data == null) await loadDatabase()
   const chat = global.db.data.chats[id] || {}
-  let text = ""
-  switch (action) {
-    case "add":
-    case "remove":
-      if (chat.welcome) {
-        const groupMetadata = (await this.groupMetadata(id)) || (conn.chats[id] || {}).metadata
-        for (const user of participants) {
-          let pp = "./media/avatar.jpg"
-          try {
-            pp = await this.profilePictureUrl(user, "image")
-          } catch (e) {}
-
-          try {
-            const welcomePlugin = await import("./plugins/_welcome.js")
-            if (welcomePlugin && typeof welcomePlugin.before === "function") {
-              await welcomePlugin.before.call(
-                this,
-                {
-                  messageStubType: action === "add" ? 27 : 28,
-                  messageStubParameters: [user],
-                  isGroup: true,
-                  chat: id,
-                },
-                {
-                  conn: this,
-                  participants: groupMetadata.participants,
-                  groupMetadata: groupMetadata,
-                },
-              )
-            }
-          } catch (e) {
-            console.error("Error in welcome plugin:", e)
-            text = (
-              action === "add"
-                ? (chat.sWelcome || this.welcome || conn.welcome || "=͟͟͞❀ 𝘽𝙞𝙚𝙣𝙫𝙚𝙣𝙞𝙙𝙤, @user ⏤͟͟͞͞★")
-                    .replace("@group", await this.getName(id))
-                    .replace("@desc", groupMetadata.desc?.toString() || "Desconocido")
-                : chat.sBye || this.bye || conn.bye || "=͟͟͞❀ 𝘼𝙙𝙞ó𝙨, @user ⏤͟͟͞͞★"
-            ).replace("@user", "@" + user.split("@")[0])
-
-            const wel = API(
-              "fgmods",
-              "/api/welcome",
+  
+  if (chat.welcome) {
+    const groupMetadata = (await this.groupMetadata(id)) || (conn.chats[id] || {}).metadata
+    
+    for (const user of participants) {
+      // Only use the welcome plugin for add/remove actions
+      if (action === "add" || action === "remove") {
+        try {
+          // Import and use only the welcome plugin
+          const welcomePlugin = await import("./plugins/_welcome.js")
+          if (welcomePlugin && typeof welcomePlugin.before === "function") {
+            await welcomePlugin.before.call(
+              this,
               {
-                username: await this.getName(user),
-                groupname: await this.getName(id),
-                groupicon: await this.profilePictureUrl(id, "image").catch((_) => pp),
-                membercount: groupMetadata.participants.length,
-                profile: pp,
-                background: "https://i.ibb.co/fkFmQC2/eve.jpg",
+                messageStubType: action === "add" ? 27 : 28,
+                messageStubParameters: [user],
+                isGroup: true,
+                chat: id,
               },
-              "apikey",
-            )
-
-            const lea = API(
-              "fgmods",
-              "/api/goodbye2",
               {
-                username: await this.getName(user),
-                groupname: await this.getName(id),
-                groupicon: await this.profilePictureUrl(id, "image").catch((_) => pp),
-                membercount: groupMetadata.participants.length,
-                profile: pp,
-                background: "https://i.ibb.co/jh9367t/akali.jpg",
+                conn: this,
+                participants: groupMetadata.participants,
+                groupMetadata: groupMetadata,
               },
-              "apikey",
             )
-
-            this.sendFile(id, action === "add" ? wel : lea, "pp.jpg", text, null, false, { mentions: [user] })
           }
+        } catch (e) {
+          console.error("Error in welcome plugin:", e)
         }
       }
-      break
-    case "promote":
+    }
+  }
+  
+  // Handle promote/demote actions
+  if (action === "promote" || action === "demote") {
+    let text = ""
+    if (action === "promote") {
       text = chat.sPromote || this.spromote || conn.spromote || "=͟͟͞❀ @user 𝙖𝙝𝙤𝙧𝙖 𝙚𝙨 𝙖𝙙𝙢𝙞𝙣𝙞𝙨𝙩𝙧𝙖𝙙𝙤𝙧 ⏤͟͟͞͞★"
-    case "demote":
-      const pp = await this.profilePictureUrl(participants[0], "image").catch((_) => "./media/avatar.jpg")
-      if (!text) text = chat.sDemote || this.sdemote || conn.sdemote || "=͟͟͞❀ @user 𝙮𝙖 𝙣𝙤 𝙚𝙨 𝙖𝙙𝙢𝙞𝙣𝙞𝙨𝙩𝙧𝙖𝙙𝙤𝙧 ⏤͟͟͞͞★"
-      text = text.replace("@user", "@" + participants[0].split("@")[0])
-      if (chat.detect) this.sendFile(id, pp, "pp.jpg", text, null, false, { mentions: this.parseMention(text) })
-      break
+    } else {
+      text = chat.sDemote || this.sdemote || conn.sdemote || "=͟͟͞❀ @user 𝙮𝙖 𝙣𝙤 𝙚𝙨 𝙖𝙙𝙢𝙞𝙣𝙞𝙨𝙩𝙧𝙖𝙙𝙤𝙧 ⏤͟͟͞͞★"
+    }
+    
+    const pp = await this.profilePictureUrl(participants[0], "image").catch((_) => "./media/avatar.jpg")
+    text = text.replace("@user", "@" + participants[0].split("@")[0])
+    if (chat.detect) this.sendFile(id, pp, "pp.jpg", text, null, false, { mentions: this.parseMention(text) })
   }
 }
 
