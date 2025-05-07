@@ -26,7 +26,7 @@ let handler = async (m, { conn: _conn, args, usedPrefix, command, isOwner }) => 
 
   let parent = args[0] && args[0] == 'plz' ? _conn : await global.conn
   if (!((args[0] && args[0] == 'plz') || (await global.conn).user.jid == _conn.user.jid)) {
-	throw `📌 ${mssg.nobbot}\n\n wa.me/${global.conn.user.jid.split`@`[0]}?text=${usedPrefix}.serbot`
+	throw `📌 ${mssg.nobbot}\n\n wa.me/${global.conn.user.jid.split`@`[0]}?text=${usedPrefix}.code`
 }
 
 	//=====
@@ -220,7 +220,7 @@ bbts()
 }
 handler.help = ['botclone']
 handler.tags = ['subbot']
-handler.command = ['bebot', 'serbot', 'jadibot', 'serbot --code', 'clonebot']
+handler.command = ['code', 'serbot', 'jadibot', 'serbot --code', 'clonebot']
 handler.rowner = false
 
 export default handler
