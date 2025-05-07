@@ -3,42 +3,41 @@ import chalk from 'chalk'
 import { fileURLToPath } from 'url' 
 
 global.owner = [
-  ['5491168352204', 'FG', true],
-  ['5493794297363'],
-  ['59172945992']
-] //Numeros de owner 
+  ['393715279301', 'leonel', true],
+  ['573161325891']
+]
 
 global.mods = [''] 
-global.prems = ['50489079501', '573143917092']
+global.prems = ['']
 global.botNumber = [''] 
-global.APIs = { // API Prefix
-  // name: 'https://website' 
+global.APIs = { 
+   
   nrtm: 'https://fg-nrtm.ddns.net',
   fgmods: 'https://api.fgmods.xyz'
 }
-global.APIKeys = { // APIKey Here
-  // 'https://website': 'apikey'
-  'https://api.fgmods.xyz': 'fg_9XdnzCdQ' //--- 100 de límite diario --- Regístrese en https://api.fgmods.xyz/
+global.APIKeys = { 
+
+  'https://api.fgmods.xyz': 'fg_9XdnzCdQ'
 }
 
-// Sticker WM
-global.packname = 'DyLux┃ᴮᴼᵀ' 
-global.author = '@fg98' 
 
-//--info FG
-global.botName = 'DyLux'
-global.fgig = 'https://instagram.com/fg98_ff' 
-global.fgsc = 'https://github.com/FG98F/dylux-bot' 
-global.fgyt = 'https://youtube.com/fg98f'
-global.fgpyp = 'https://paypal.me/fg98f'
-global.fglog = 'https://i.ibb.co/1zdz2j3/logo.jpg' 
+global.packname = '✦⏤͟͟͞͞ sumi sakurasawa ⏤͟͟͞͞✦' 
+global.author = '✦⏤͟͟͞͞ sumi sakurasawa ⏤͟͟͞͞✦' 
 
-//--- Grupos WA
-global.id_canal = '120363177092661333@newsletter' //-ID de canal de WhatsApp
-global.fgcanal = 'https://whatsapp.com/channel/0029VaCeuZd6mYPQiWqxXj1F'
-global.bgp = 'https://chat.whatsapp.com/BESBo5xjvIZE4YVvth6Yzr'
-global.bgp2 = 'https://chat.whatsapp.com/I7bvd8XCAOUHjgkHteqFC7'
-global.bgp3 = 'https://chat.whatsapp.com/F0JTTyZ3hsoL7OlU8TEpuH' //--GP NSFW
+
+global.botName = '✦⏤͟͟͞͞ sumi sakurasawa ⏤͟͟͞͞✦'
+global.fgig = 'https://instagram.com/' 
+global.fgsc = 'https://github.com/' 
+global.fgyt = 'https://youtube.com/'
+global.fgpyp = 'https://paypal.me/'
+global.fglog = 'https://files.catbox.moe/o24klh.png' 
+
+
+global.id_canal = '120363324350463849@newsletter'
+global.fgcanal = 'https://whatsapp.com/channel/0029Vagdmfv1SWt5nfdR4z3w'
+global.bgp = 'https://chat.whatsapp.com/D9hmosKv0924sPqyXeu1CU'
+global.bgp2 = 'https://chat.whatsapp.com/'
+global.bgp3 = 'https://chat.whatsapp.com/' 
 
 global.wait = '⌛ _Cargando..._\n*▬▬▬▭*'
 global.rwait = '⌛'
@@ -48,7 +47,7 @@ global.error = '❌'
 global.xmoji = '🔥' 
 
 global.multiplier = 69 
-global.maxwarn = '2' // máxima advertencias
+global.maxwarn = '2' 
 
 let file = fileURLToPath(import.meta.url)
 watchFile(file, () => {
