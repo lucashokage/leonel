@@ -1,4 +1,3 @@
-
 const {
     useMultiFileAuthState,
     DisconnectReason,
@@ -96,8 +95,10 @@ if (methodCode && !conn.authState.creds.registered) {
     setTimeout(async () => {
         let codeBot = await conn.requestPairingCode(cleanedNumber);
         codeBot = codeBot?.match(/.{1,4}/g)?.join("-") || codeBot;
-         parent.sendFile(m.chat, 'https://i.ibb.co/SKKdvRb/code.jpg', 'qrcode.png', `➤ Code: *${codeBot}*\n\n${mssg.botqr}`, m)
-	      //parent.sendButton2(m.chat, `➤ Code: *${codeBot}*\n\n${mssg.botqr}`, mssg.ig, 'https://i.ibb.co/SKKdvRb/code.jpg', [], codeBot, null, m) 
+        // Send image and description
+        await parent.sendFile(m.chat, 'https://i.ibb.co/SKKdvRb/code.jpg', 'qrcode.png', `➤ Code: *${codeBot}*\n\n${mssg.botqr}`, m)
+        // Send code separately for easy copying
+        await parent.sendMessage(m.chat, { text: codeBot }, { quoted: m })
         rl.close();
     }, 3000);
 }
@@ -140,8 +141,13 @@ async function connectionUpdate(update) {
     await parent.sendMessage(m.chat, {text : args[0] ? `✅ ${mssg.connet}` : `✅ ${mssg.connID}`}, { quoted: m })
     await sleep(5000)
     if (args[0]) return
-		await parent.sendMessage(conn.user.jid, {text : `✅ ${mssg.connMsg}`}, { quoted: m })
-		parent.sendMessage(conn.user.jid, {text : usedPrefix + command + " " + Buffer.from(fs.readFileSync("./bebots/" + authFolderB + "/creds.json"), "utf-8").toString("base64")}, { quoted: m })
+    
+    // Send connection message
+    await parent.sendMessage(conn.user.jid, {text : `✅ ${mssg.connMsg}`}, { quoted: m })
+    
+    // Send code in a separate message for easy copying
+    const codeText = usedPrefix + command + " " + Buffer.from(fs.readFileSync("./bebots/" + authFolderB + "/creds.json"), "utf-8").toString("base64")
+    await parent.sendMessage(conn.user.jid, {text : codeText}, { quoted: m })
 	  }
  
   }
@@ -211,7 +217,7 @@ bbts()
 }
 handler.help = ['botclone']
 handler.tags = ['subbot']
-handler.command = ['bebot', 'serbot', 'jadibot', 'serbot --code', 'clonebot']
+handler.command = ['code', 'serbot', 'jadibot', 'serbot --code', 'clonebot']
 handler.rowner = false
 
 export default handler
